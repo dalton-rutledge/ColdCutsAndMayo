@@ -8,7 +8,85 @@
 </head>
 <body>
 
-    <h1>Someday a game will be here</h1>
+    <h1>Teacher Profile</h1>
+
+
+    <form id="addStudentForm" name="addStudentForm" method="post" action=" ">
+        <table id="classTable" border="1">
+            <tr>
+                <th colspan="2">Student Info</th>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td><input type="text" name="firstName" value=""></td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td><input type="text" name="lastName" value=""></td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <input type="button" name="addStudentButton" value="Add Student" onclick="addStudent(this.form);">
+                    <input type="reset" value="reset" />
+                </th>
+            </tr>
+        </table>
+    </form>
+
+    <br />
+    <br />
+
+
+    <table id="studentList" border=1>
+        <tr><th colspan="3">Your Students</th></tr>
+        <tr><th>First Name</th><th>Last Name</th>
+    </table>
+
+    <!--
+
+    <form name="accessCode">
+        <input type="button" value="Get Access Code" onclick="Random();" />
+        <input type="text" id="accessCode" name="accessCode">
+
+    </form>
+
+    <script>
+        function Random() {
+            var rnd = Math.floor(Math.random() * 10000);
+            document.getElementById('accessCode').value = rnd;
+        }
+    </script>
+
+     -->
+
+    <script>
+        function addStudent(form) {
+            var firstName = form.firstName.value;
+            var lastName = form.lastName.value;
+
+            let tableID = "studentList";
+            let tableRef = document.getElementById(tableID);
+
+            let newRow = tableRef.insertRow(-1);
+            let newCell = newRow.insertCell(0);
+            let newText = document.createTextNode(firstName);
+            newCell.appendChild(newText);
+
+            newCell = newRow.insertCell(1);
+            newText = document.createTextNode(lastName);
+            newCell.appendChild(newText);
+
+        }
+    </script>
+
+    <script src="js/vendor/jquery-3.1.0.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/aws-cognito-sdk.min.js"></script>
+    <script src="js/vendor/amazon-cognito-identity.min.js"></script>
+    <script src="https://js.arcgis.com/4.3/"></script>
+    <script src="js/config.js"></script>
+    <script src="js/cognito-auth.js"></script>
+    <script src="js/esri-map.js"></script>
 
 </body>
 </html>
