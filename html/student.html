@@ -3,7 +3,19 @@
 <head>
     <title></title>
 </head>
+<script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+<script type="text/javascript" src="lib/url-template/url-template.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+<script type="text/javascript" src="apigClient.js"></script>
 <body>
+
     <h1>
         Sign in to Play the Game
     </h1>
@@ -11,10 +23,10 @@
     <img src="images/blueJelly.jpg">
 
     <form id="studentAcces" action="Jelly_Monsters/index.html">
-        <input accesskey="accessCode" id="accessCode" placeholder="Code From Teacher">
+        <input accesskey="accessCode" id="accessCode" placeholder="Code From Teacher" required>
         <input type="button" id="codeButton" name="codeButton" value="Enter" onclick="submitForm(this.form);">
-        <select name="studentName" placeholder="name">
-            
+        <select name="studentName" id="studentName" placeholder="name" required>
+            <option value="" disabled selected>Pick Your Name</option>
         </select>
 
         <input type="submit" value="Let's go shoot BALLOONS">
@@ -22,7 +34,38 @@
 
     <script>
         function submitForm(form) {
-            var code = document.getElementById("accessCode");
+            var apigClient = apigClientFactory.newClient();
+            //var code = document.getElementById("accessCode").toString();
+            var code = form.accessCode.value;
+            var params = {
+                "Class_ID" : code
+            };
+            var body = {};
+            var additionalParams = {};
+
+apigClient.getApiGet(params, body, additionalParams)
+    .then(function(result){
+        console.log(result);
+        console.log(result.data);
+        console.log(result.data["Items"].length);
+        console.log(result.data["Items"][0]);
+        console.log(result.data["Items"][0]["Student_Name"]);
+        //var selectList = "<select name='studentName'>";
+        var dropdown = document.getElementById("studentName");
+        var selectList = "";
+        var selectOption = "";
+        for (var x = 0; x < result.data["Items"].length; x++) {
+            //selectList += "<option>" + result.data["Items"][x]["Student_Name"] + "</option>";
+            dropdown.options[dropdown.options.length] = new Option(result.data["Items"][x]["Student_Name"], x)
+        }
+        //selectList += "</select>";
+        //dropdown.append(selectList);
+        console.log("Success!");
+    }).catch( function(result){
+        console.log("error");
+        console.log(result);
+    });
+
         }
     </script>
     <script src="js/vendor/jquery-3.1.0.js"></script>
