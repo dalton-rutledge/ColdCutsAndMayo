@@ -1,0 +1,9 @@
+{
+    "body-json":{},
+    "params": {
+        "path":{},
+        "querystring": { 
+  "Class_ID": "0001"
+}
+}
+}
