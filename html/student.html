@@ -11,16 +11,20 @@
     <img src="images/blueJelly.jpg">
 
     <form id="studentAcces" action="Jelly_Monsters/index.html">
-        <input accesskey="accessCode" id="AccessCode" placeholder="Code From Teacher">
+        <input accesskey="accessCode" id="accessCode" placeholder="Code From Teacher">
+        <input type="button" id="codeButton" name="codeButton" value="Enter" onclick="submitForm(this.form);">
         <select name="studentName" placeholder="name">
-            <option value="billy">BILLY</option>
-            <option value="honey">HONEY</option>
-            <option value="charlie">CHARLIE</option>
+            
         </select>
 
         <input type="submit" value="Let's go shoot BALLOONS">
     </form>
 
+    <script>
+        function submitForm(form) {
+            var code = document.getElementById("accessCode");
+        }
+    </script>
     <script src="js/vendor/jquery-3.1.0.js"></script>
     <script src="js/vendor/bootstrap.min.js"></script>
     <script src="js/vendor/aws-cognito-sdk.min.js"></script>
