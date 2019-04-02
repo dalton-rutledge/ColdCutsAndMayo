@@ -1,0 +1,20 @@
+{
+  "body": {
+    "Time_Played": "300",
+    "Level_Wins": "6",
+    "Level_Losses": "1",
+    "Wrong_Probs": [
+      "5+5",
+      "15+3",
+      "3+0+1"
+    ]
+  },
+  "params": {
+    "path": {},
+    "querystring": {
+      "Class_ID": "0001",
+      "Student_Name": "Alice"
+    },
+    "header": {}
+  }
+}
