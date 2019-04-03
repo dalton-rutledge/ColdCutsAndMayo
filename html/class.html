@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+<script type="text/javascript" src="lib/url-template/url-template.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+<script type="text/javascript" src="apigClient.js"></script>
+
+<body>
+
+    <form id="createClass" action="">
+        <input type="text" id="aCode" name="aCode" pattern="[0-9]{4}" placeholder="4 digit number" required>
+        <input type="button" id="putCode" name="putCode" value="Find Class" onclick= "getClass(this.form);">
+    </form>
+
+    <form id="noClass" action="profile.html">
+        <input type="submit" id="noClass" value="I do not have a class yet">
+    </form>
+
+    <br>
+    <br>
+
+    <form>
+        <table id="studentList" border=1 style="width:75%">
+            <tr><th colspan="3">Your Students</th></tr>
+            <tr>
+                <th>Student Names:</th>
+                <th>Grade </th>
+                <th>Time played </th>
+                <th>Levels Passed </th>
+                <th>Levels Failed</th>
+                <th>Wrong Problems</th>
+             </tr>
+        </table>
+
+    </form>
+    <br />
+    <br />
+
+    <script>
+       
+        function getClass(form) {
+
+            jQuery('#createClass').hide();
+
+                    var apigClient = apigClientFactory.newClient();
+                    var code = form.aCode.value;
+                    var params = {
+                        "Class_ID" : code
+                    };
+                    var body = {};
+                    var additionalParams = {};
+
+           
+
+
+            apigClient.getApiGet(params, body, additionalParams)
+                  .then(function(result){
+                console.log(result);
+                console.log(result.data);
+                console.log(result.data["Items"].length);
+                console.log(result.data["Items"][0]);
+                      console.log(result.data["Items"][0]["Grade"]);
+
+                      let tableID = "studentList";
+                      let tableRef = document.getElementById(tableID);
+                
+                for (var x = 0; x < result.data["Items"].length; x++) {
+                    var name = result.data["Items"][x]["Student_Name"];
+                    var grade = result.data["Items"][x]["Grade"];
+                    var time = result.data["Items"][x]["Time_Played"];
+                    var wins = result.data["Items"][x]["Level_Wins"];
+                    var losses = result.data["Items"][x]["Level_Losses"];
+                    var wrong = result.data["Items"][x]["Wrong_Probs"];
+
+                    let newRow = tableRef.insertRow(-1);
+                    let nameCell = newRow.insertCell(0);
+                    let nameText = document.createTextNode(name);
+                    nameCell.appendChild(nameText);
+
+                    let gradeCell = newRow.insertCell(-1);
+                    let gradeText = document.createTextNode(grade);
+                    gradeCell.appendChild(gradeText);
+
+                    let timeCell = newRow.insertCell(-1);
+                    let timeText = document.createTextNode(time);
+                    timeCell.appendChild(timeText);
+
+                    let winsCell = newRow.insertCell(-1);
+                    let winsText = document.createTextNode(wins);
+                    winsCell.appendChild(winsText);
+
+                    let lossesCell = newRow.insertCell(-1);
+                    let lossesText = document.createTextNode(losses);
+                    lossesCell.appendChild(lossesText);
+
+                    let wrongCell = newRow.insertCell(-1);
+                    let wrongText = document.createTextNode(wrong);
+                    wrongCell.appendChild(wrongText);
+                    
+                    
+                      }
+
+                console.log("Success!");
+            }).catch( function(result){
+                console.log("error");
+                console.log(result);
+            });
+
+                }
+    </script>
+    <script src="js/vendor/jquery-3.1.0.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/aws-cognito-sdk.min.js"></script>
+    <script src="js/vendor/amazon-cognito-identity.min.js"></script>
+    <script src="https://js.arcgis.com/4.3/"></script>
+    <script src="js/config.js"></script>
+    <script src="js/cognito-auth.js"></script>
+    <script src="js/esri-map.js"></script>
+
+
+</body>
+</html>

@@ -22,49 +22,52 @@
 
     <img src="images/blueJelly.jpg">
 
-    <form id="studentAcces" action="Jelly_Monsters/index.html">
-        <input accesskey="accessCode" id="accessCode" placeholder="Code From Teacher" required>
-        <input type="button" id="codeButton" name="codeButton" value="Enter" onclick="submitForm(this.form);">
+    <form id="studentAcces">
+        <input type="text" id="Class_ID" name="Class_ID" placeholder="Code From Teacher" required>
+        <input type="button" id="codeButton" name="codeButton" value="Enter" onclick="submitCode(this.form);">
         <select name="studentName" id="studentName" placeholder="name" required>
             <option value="" disabled selected>Pick Your Name</option>
         </select>
-
-        <input type="submit" value="Let's go shoot BALLOONS">
+        <input type="submit" value="See your Progress" formaction="studentData.html">
+        <input type="submit" value="Let's go shoot Monsters" formaction="Jelly_Monsters/index.html"> 
     </form>
 
     <script>
-        function submitForm(form) {
+
+        function submitForm(action) {
+            var form = document.getElementById('studentAccess');
+            form.action = action;
+            form.submit();
+        }
+
+        function submitCode(form) {
             var apigClient = apigClientFactory.newClient();
-            //var code = document.getElementById("accessCode").toString();
-            var code = form.accessCode.value;
+            var code = form.Class_ID.value;
             var params = {
                 "Class_ID" : code
             };
             var body = {};
             var additionalParams = {};
 
-apigClient.getApiGet(params, body, additionalParams)
-    .then(function(result){
-        console.log(result);
-        console.log(result.data);
-        console.log(result.data["Items"].length);
-        console.log(result.data["Items"][0]);
-        console.log(result.data["Items"][0]["Student_Name"]);
-        //var selectList = "<select name='studentName'>";
-        var dropdown = document.getElementById("studentName");
-        var selectList = "";
-        var selectOption = "";
-        for (var x = 0; x < result.data["Items"].length; x++) {
-            //selectList += "<option>" + result.data["Items"][x]["Student_Name"] + "</option>";
-            dropdown.options[dropdown.options.length] = new Option(result.data["Items"][x]["Student_Name"], x)
-        }
-        //selectList += "</select>";
-        //dropdown.append(selectList);
-        console.log("Success!");
-    }).catch( function(result){
-        console.log("error");
-        console.log(result);
-    });
+            apigClient.getApiGet(params, body, additionalParams)
+                .then(function (result) {
+                    console.log(result);
+                    console.log(result.data);
+                    console.log(result.data["Items"].length);
+                    console.log(result.data["Items"][0]);
+                    console.log(result.data["Items"][0]["Student_Name"]);
+                    var dropdown = document.getElementById("studentName");
+                    var selectList = "";
+                    var selectOption = "";
+                    for (var x = 0; x < result.data["Items"].length; x++) {
+                        dropdown.options[dropdown.options.length] = new Option(result.data["Items"][x]["Student_Name"], x)
+                    }
+
+                    console.log("Success!");
+                }).catch(function (result) {
+                    console.log("error");
+                    console.log(result);
+                });
 
         }
     </script>
