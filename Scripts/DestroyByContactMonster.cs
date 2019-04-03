@@ -6,6 +6,7 @@ public class DestroyByContactMonster : MonoBehaviour
 {
     public GameObject explosion;
     public GameObject playerExplosion;
+    public static bool addProb = false;
     public int scoreValue;
     private GameController gameController;
     private void Start()
@@ -17,24 +18,30 @@ public class DestroyByContactMonster : MonoBehaviour
         }
         if (gameController == null)
         {
-            Debug.Log("Cannot fine 'GameController' script");
+            Debug.Log("Cannot find 'GameController' script");
         }
     }
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.tag == "Boundary")
         {
             return;
         }
-        Instantiate(explosion, transform.position, transform.rotation);
-        if (other.tag == "Player")
+        if (gameObject.GetComponent<GUIText>().text == GameController.correctAnswer)
         {
-            Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-            gameController.GameOver();
+            Instantiate(explosion, transform.position, transform.rotation);
+            gameController.AddScore(scoreValue);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
         }
-        gameController.AddScore(scoreValue);
-        Destroy(other.gameObject);
-        Destroy(gameObject);
+        else if(gameObject.GetComponent<GUIText>().text != GameController.correctAnswer || gameObject.tag == "BackBoundary")
+        {
+            print("HERE");
+            addProb = true;
+        }
+      
+
     }
 }

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public GameObject shot;
     public Transform shotSpawn;
     public float fireRate;
+    public static int numShots = 0;
 
     private float nextFire;
     private Rigidbody rb;
@@ -25,8 +26,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        numShots = 0;
         if(Input.GetKeyDown(KeyCode.Space) && Time.time > nextFire)
         {
+            if(GameController.outOfShots == true || GameController.shotsLeft == 0)
+            {
+                return;
+            }
+            numShots += 1;
             nextFire = Time.time + fireRate;
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
             audioSource.Play();
