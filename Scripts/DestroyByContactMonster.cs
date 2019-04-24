@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class DestroyByContactMonster : MonoBehaviour
 {
+    public static bool addProb = false;
+
+    public AudioSource clip;
     public GameObject explosion;
     public GameObject playerExplosion;
-    public static bool addProb = false;
     public int scoreValue;
     private GameController gameController;
+
+
     private void Start()
     {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -21,7 +25,8 @@ public class DestroyByContactMonster : MonoBehaviour
             Debug.Log("Cannot find 'GameController' script");
         }
     }
-    // Start is called before the first frame update
+
+
     private void OnTriggerEnter(Collider other)
     {
 
@@ -29,6 +34,7 @@ public class DestroyByContactMonster : MonoBehaviour
         {
             return;
         }
+        //If game object is the correct answer
         if (gameObject.GetComponent<GUIText>().text == GameController.correctAnswer)
         {
             Instantiate(explosion, transform.position, transform.rotation);
@@ -36,10 +42,14 @@ public class DestroyByContactMonster : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(gameObject);
         }
+        //Else if the game object is not the correct answer
         else if(gameObject.GetComponent<GUIText>().text != GameController.correctAnswer || gameObject.tag == "BackBoundary")
         {
-            print("HERE");
             addProb = true;
+            clip.Play();
+          
+
+
         }
       
 

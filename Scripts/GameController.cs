@@ -25,86 +25,549 @@ public class GameController : MonoBehaviour
     public GUIText orangeMonsterText;
     public GUIText shotsText;
 
-    public int nullMonster = 0;
     public static string correctAnswer;
+    public static bool outOfShots;
+    public static int shotsLeft;
+    public static List<string> wrongProblems = new List<string>();
 
     private bool gameOver;
     private bool restart;
-    public static bool outOfShots;
+    //public string getData;
     private int score;
+    public int nullMonster = 0;
 
-    //private string[] questions = { " 4 + 5 =", " 1 + 3 = ", " 2 + 5 = ", " 1 + 1 = ", " 7 + 1 = ", "" };
     private string[] questions = new string[6];
     private string[] answers = new string[6];
+    private string[] teacherList;
     private int[] random = { 0, 1, 2, 3, 4 };
     private List<GameObject> monsters = new List<GameObject>();
-
-    private DataController dataController;
-    private RoundData currentRoundData;
-    private QuestionData[] questionPool;
 
     private bool isRoundActive;
     private float timeRemaining;
     private int questionIndex;
     private int numShots;
-    public static int shotsLeft = 8;
     private int numMonsters = 0;
     private string putString;
     private float timePlayed = 0.0f;
     private int seconds;
     private string levelsWon = "0";
     private string levelsLost = "0";
-    public static List<string> wrongProblems = new List<string>();
+   
 
 
 
     private void Start()
     {
 
+        // Addition Levels
         if (MenuScreenController.mode == 0)
         {
-            questions[0] = " 4 + 5 =";
-            questions[1] = " 1 + 3 =";
-            questions[2] = " 2 + 5 =";
-            questions[3] = " 1 + 1 =";
-            questions[4] = " 7 + 1 =";
-            questions[5] = "";
-            answers[0] = "9";
-            answers[1] = "4";
-            answers[2] = "7";
-            answers[3] = "2";
-            answers[4] = "8";
-            answers[5] = "";
+            if (LevelScreenController.selection == 1)
+            {
+                shotsLeft = 8;
+                questions[0] = " 1 + 1 =";
+                questions[1] = " 2 + 1 =";
+                questions[2] = " 0 + 1 =";
+                questions[3] = " 3 + 1 =";
+                questions[4] = " 4 + 1 =";
+                questions[5] = "";
+                answers[0] = "2";
+                answers[1] = "3";
+                answers[2] = "1";
+                answers[3] = "4";
+                answers[4] = "5";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 2)
+            {
+                shotsLeft = 8;
+                questions[0] = " 2 + 2 =";
+                questions[1] = " 2 + 3 =";
+                questions[2] = " 1 + 5 =";
+                questions[3] = " 2 + 1 =";
+                questions[4] = " 6 + 1 =";
+                questions[5] = "";
+                answers[0] = "4";
+                answers[1] = "5";
+                answers[2] = "6";
+                answers[3] = "3";
+                answers[4] = "7";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 3)
+            {
+                shotsLeft = 8;
+                questions[0] = " 3 + 2 =";
+                questions[1] = " 4 + 3 =";
+                questions[2] = " 1 + 5 =";
+                questions[3] = " 2 + 6 =";
+                questions[4] = " 9 + 1 =";
+                questions[5] = "";
+                answers[0] = "5";
+                answers[1] = "7";
+                answers[2] = "6";
+                answers[3] = "8";
+                answers[4] = "10";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 4)
+            {
+                shotsLeft = 8;
+                questions[0] = " 7 + 2 =";
+                questions[1] = " 5 + 3 =";
+                questions[2] = " 10 + 5 =";
+                questions[3] = " 1 + 6 =";
+                questions[4] = " 9 + 2 =";
+                questions[5] = "";
+                answers[0] = "9";
+                answers[1] = "8";
+                answers[2] = "15";
+                answers[3] = "7";
+                answers[4] = "11";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 5)
+            {
+                shotsLeft = 7;
+                questions[0] = " 10 + 2 =";
+                questions[1] = " 5 + 6 =";
+                questions[2] = " 10 + 5 =";
+                questions[3] = " 3 + 6 =";
+                questions[4] = " 9 + 4 =";
+                questions[5] = "";
+                answers[0] = "12";
+                answers[1] = "11";
+                answers[2] = "15";
+                answers[3] = "9";
+                answers[4] = "13";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 6)
+            {
+                shotsLeft = 7;
+                questions[0] = " 11 + 4 =";
+                questions[1] = " 5 + 8 =";
+                questions[2] = " 7 + 5 =";
+                questions[3] = " 3 + 7 =";
+                questions[4] = " 8 + 3 =";
+                questions[5] = "";
+                answers[0] = "15";
+                answers[1] = "13";
+                answers[2] = "12";
+                answers[3] = "10";
+                answers[4] = "11";
+                answers[5] = "";
+            }
+
+            if (LevelScreenController.selection == 7)
+            {
+                shotsLeft = 7;
+                questions[0] = " 11 + 10 =";
+                questions[1] = " 4 + 15 =";
+                questions[2] = " 12 + 5 =";
+                questions[3] = " 3 + 11 =";
+                questions[4] = " 17 + 3 =";
+                questions[5] = "";
+                answers[0] = "21";
+                answers[1] = "19";
+                answers[2] = "17";
+                answers[3] = "14";
+                answers[4] = "20";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 8)
+            {
+                shotsLeft = 6;
+                questions[0] = " 11 + 15 =";
+                questions[1] = " 15 + 6 =";
+                questions[2] = " 8 + 12 =";
+                questions[3] = " 7 + 11 =";
+                questions[4] = " 7 + 22 =";
+                questions[5] = "";
+                answers[0] = "26";
+                answers[1] = "21";
+                answers[2] = "20";
+                answers[3] = "18";
+                answers[4] = "29";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 9)
+            {
+                shotsLeft = 6;
+                questions[0] = " 11 + 20 =";
+                questions[1] = " 18 + 6 =";
+                questions[2] = " 6 + 23 =";
+                questions[3] = " 20 + 20 =";
+                questions[4] = " 17 + 20 =";
+                questions[5] = "";
+                answers[0] = "31";
+                answers[1] = "24";
+                answers[2] = "29";
+                answers[3] = "40";
+                answers[4] = "37";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 10)
+            {
+                shotsLeft = 5;
+                questions[0] = " 20 + 30 =";
+                questions[1] = " 15 + 27 =";
+                questions[2] = " 30 + 17 =";
+                questions[3] = " 23 + 11 =";
+                questions[4] = " 53 + 7 =";
+                questions[5] = "";
+                answers[0] = "50";
+                answers[1] = "42";
+                answers[2] = "47";
+                answers[3] = "34";
+                answers[4] = "60";
+                answers[5] = "";
+            }
+
         }
+        // Subtraction Levels
         if (MenuScreenController.mode == 1)
         {
-            questions[0] = " 9 - 5 =";
-            questions[1] = " 3 - 1 =";
-            questions[2] = " 7 - 0 =";
-            questions[3] = " 2 - 2 =";
-            questions[4] = " 6 - 3 =";
-            questions[5] = "";
-            answers[0] = "4";
-            answers[1] = "2";
-            answers[2] = "7";
-            answers[3] = "0";
-            answers[4] = "3";
-            answers[5] = "";
+            if (LevelScreenController.selection == 1)
+            {
+                shotsLeft = 8;
+                questions[0] = " 1 - 1 =";
+                questions[1] = " 3 - 0 =";
+                questions[2] = " 2 - 1 =";
+                questions[3] = " 4 - 2 =";
+                questions[4] = " 5 - 1 =";
+                questions[5] = "";
+                answers[0] = "0";
+                answers[1] = "3";
+                answers[2] = "1";
+                answers[3] = "2";
+                answers[4] = "4";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 2)
+            {
+                shotsLeft = 8;
+                questions[0] = " 5 - 4 =";
+                questions[1] = " 3 - 3 =";
+                questions[2] = " 2 - 0 =";
+                questions[3] = " 4 - 1 =";
+                questions[4] = " 5 - 1 =";
+                questions[5] = "";
+                answers[0] = "1";
+                answers[1] = "0";
+                answers[2] = "2";
+                answers[3] = "3";
+                answers[4] = "4";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 3)
+            {
+                shotsLeft = 8;
+                questions[0] = " 6 - 2 =";
+                questions[1] = " 3 - 0 =";
+                questions[2] = " 7 - 1 =";
+                questions[3] = " 7 - 3 =";
+                questions[4] = " 4 - 3 =";
+                questions[5] = "";
+                answers[0] = "4";
+                answers[1] = "3";
+                answers[2] = "6";
+                answers[3] = "4";
+                answers[4] = "1";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 4)
+            {
+                shotsLeft = 8;
+                questions[0] = " 9 - 2 =";
+                questions[1] = " 7 - 3 =";
+                questions[2] = " 8 - 6 =";
+                questions[3] = " 6 - 3 =";
+                questions[4] = " 9 - 8 =";
+                questions[5] = "";
+                answers[0] = "7";
+                answers[1] = "4";
+                answers[2] = "2";
+                answers[3] = "3";
+                answers[4] = "1";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 5)
+            {
+                shotsLeft = 7;
+                questions[0] = " 11 - 2 =";
+                questions[1] = " 10 - 3 =";
+                questions[2] = " 15 - 7 =";
+                questions[3] = " 13 - 11 =";
+                questions[4] = " 11 - 8 =";
+                questions[5] = "";
+                answers[0] = "9";
+                answers[1] = "7";
+                answers[2] = "8";
+                answers[3] = "2";
+                answers[4] = "3";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 6)
+            {
+                shotsLeft = 7;
+                questions[0] = " 11 - 2 =";
+                questions[1] = " 10 - 3 =";
+                questions[2] = " 15 - 7 =";
+                questions[3] = " 13 - 11 =";
+                questions[4] = " 11 - 8 =";
+                questions[5] = "";
+                answers[0] = "9";
+                answers[1] = "7";
+                answers[2] = "8";
+                answers[3] = "2";
+                answers[4] = "3";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 7)
+            {
+                shotsLeft = 7;
+                questions[0] = " 15 - 5 =";
+                questions[1] = " 10 - 7 =";
+                questions[2] = " 17 - 3 =";
+                questions[3] = " 16 - 11 =";
+                questions[4] = " 13 - 7 =";
+                questions[5] = "";
+                answers[0] = "10";
+                answers[1] = "3";
+                answers[2] = "14";
+                answers[3] = "5";
+                answers[4] = "6";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 8)
+            {
+                shotsLeft = 6;
+                questions[0] = " 19 - 5 =";
+                questions[1] = " 18 - 13 =";
+                questions[2] = " 13 - 6 =";
+                questions[3] = " 15 - 13 =";
+                questions[4] = " 16 - 7 =";
+                questions[5] = "";
+                answers[0] = "14";
+                answers[1] = "5";
+                answers[2] = "7";
+                answers[3] = "2";
+                answers[4] = "9";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 9)
+            {
+                shotsLeft = 6;
+                questions[0] = " 20 - 5 =";
+                questions[1] = " 22 - 13 =";
+                questions[2] = " 25 - 18 =";
+                questions[3] = " 15 - 2 =";
+                questions[4] = " 28 - 7 =";
+                questions[5] = "";
+                answers[0] = "15";
+                answers[1] = "9";
+                answers[2] = "7";
+                answers[3] = "13";
+                answers[4] = "21";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 10)
+            {
+                shotsLeft = 5;
+                questions[0] = " 30 - 11 =";
+                questions[1] = " 40 - 20 =";
+                questions[2] = " 35 - 18 =";
+                questions[3] = " 25 - 2 =";
+                questions[4] = " 29 - 7 =";
+                questions[5] = "";
+                answers[0] = "19";
+                answers[1] = "20";
+                answers[2] = "17";
+                answers[3] = "23";
+                answers[4] = "22";
+                answers[5] = "";
+            }
         }
-
+        // Number Places Levels
         if (MenuScreenController.mode == 2)
         {
-            questions[0] = " 395 (1's place)";
-            questions[1] = " 204 (100's place)";
-            questions[2] = " 153 (100's place)";
-            questions[3] = " 1000 (10's place)";
-            questions[4] = " 1234 (1's place)";
+            if(LevelScreenController.selection == 1)
+            {
+                shotsLeft = 8;
+                questions[0] = " 12 (1's place)";
+                questions[1] = " 15 (10's place)";
+                questions[2] = " 53 (10's place)";
+                questions[3] = " 34 (1's place)";
+                questions[4] = " 19 (1's place)";
+                questions[5] = "";
+                answers[0] = "2";
+                answers[1] = "1";
+                answers[2] = "5";
+                answers[3] = "4";
+                answers[4] = "9";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 2)
+            {
+                shotsLeft = 8;
+                questions[0] = " 15 (1's place)";
+                questions[1] = " 204 (100's place)";
+                questions[2] = " 163 (10's place)";
+                questions[3] = " 70 (10's place)";
+                questions[4] = " 123 (1's place)";
+                questions[5] = "";
+                answers[0] = "5";
+                answers[1] = "2";
+                answers[2] = "6";
+                answers[3] = "7";
+                answers[4] = "3";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 3)
+            {
+                shotsLeft = 8;
+                questions[0] = " 156 (1's place)";
+                questions[1] = " 804 (100's place)";
+                questions[2] = " 993 (10's place)";
+                questions[3] = " 505 (10's place)";
+                questions[4] = " 721 (1's place)";
+                questions[5] = "";
+                answers[0] = "6";
+                answers[1] = "8";
+                answers[2] = "9";
+                answers[3] = "0";
+                answers[4] = "1";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 4)
+            {
+                shotsLeft = 8;
+                questions[0] = " 988 (1's place)";
+                questions[1] = " 236 (100's place)";
+                questions[2] = " 541 (10's place)";
+                questions[3] = " 676 (10's place)";
+                questions[4] = " 236 (1's place)";
+                questions[5] = "";
+                answers[0] = "8";
+                answers[1] = "2";
+                answers[2] = "4";
+                answers[3] = "7";
+                answers[4] = "6";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 5)
+            {
+                shotsLeft = 7;
+                questions[0] = " 567 (1's place)";
+                questions[1] = " 934 (100's place)";
+                questions[2] = " 163 (100's place)";
+                questions[3] = " 609 (10's place)";
+                questions[4] = " 482 (1's place)";
+                questions[5] = "";
+                answers[0] = "7";
+                answers[1] = "9";
+                answers[2] = "1";
+                answers[3] = "0";
+                answers[4] = "2";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 6)
+            {
+                shotsLeft = 7;
+                questions[0] = " 962 (1's place)";
+                questions[1] = " 670 (100's place)";
+                questions[2] = " 329 (100's place)";
+                questions[3] = " 148 (10's place)";
+                questions[4] = " 659 (1's place)";
+                questions[5] = "";
+                answers[0] = "2";
+                answers[1] = "6";
+                answers[2] = "3";
+                answers[3] = "4";
+                answers[4] = "9";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 7)
+            {
+                shotsLeft = 7;
+                questions[0] = " 368 (1's place)";
+                questions[1] = " 489 (100's place)";
+                questions[2] = " 970 (100's place)";
+                questions[3] = " 367 (10's place)";
+                questions[4] = " 951 (1's place)";
+                questions[5] = "";
+                answers[0] = "8";
+                answers[1] = "4";
+                answers[2] = "9";
+                answers[3] = "6";
+                answers[4] = "1";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 8)
+            {
+                shotsLeft = 6;
+                questions[0] = " 543 (1's place)";
+                questions[1] = " 509 (100's place)";
+                questions[2] = " 821 (100's place)";
+                questions[3] = " 794 (10's place)";
+                questions[4] = " 290 (1's place)";
+                questions[5] = "";
+                answers[0] = "3";
+                answers[1] = "5";
+                answers[2] = "8";
+                answers[3] = "9";
+                answers[4] = "0";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 9)
+            {
+                shotsLeft = 6;
+                questions[0] = " 901 (1's place)";
+                questions[1] = " 857 (10's place)";
+                questions[2] = " 321 (100's place)";
+                questions[3] = " 874 (10's place)";
+                questions[4] = " 342 (1's place)";
+                questions[5] = "";
+                answers[0] = "1";
+                answers[1] = "5";
+                answers[2] = "3";
+                answers[3] = "7";
+                answers[4] = "2";
+                answers[5] = "";
+            }
+            if (LevelScreenController.selection == 10)
+            {
+                shotsLeft = 5;
+                questions[0] = " 126 (1's place)";
+                questions[1] = " 639 (10's place)";
+                questions[2] = " 915 (100's place)";
+                questions[3] = " 750 (10's place)";
+                questions[4] = " 280 (1's place)";
+                questions[5] = "";
+                answers[0] = "6";
+                answers[1] = "3";
+                answers[2] = "9";
+                answers[3] = "5";
+                answers[4] = "0";
+                answers[5] = "";
+            }
+        }
+        // Teacher Questions
+        if (MenuScreenController.mode == 3)
+        {
+            shotsLeft = 8;
+            questions[0] = (string)MenuScreenController.teacherList.GetValue(0);
+            questions[1] = (string)MenuScreenController.teacherList.GetValue(1);
+            questions[2] = (string)MenuScreenController.teacherList.GetValue(2);
+            questions[3] = (string)MenuScreenController.teacherList.GetValue(3);
+            questions[4] = (string)MenuScreenController.teacherList.GetValue(4);
             questions[5] = "";
-            answers[0] = "5";
-            answers[1] = "2";
-            answers[2] = "1";
-            answers[3] = "0";
-            answers[4] = "4";
+            answers[0] = (string)MenuScreenController.teacherList.GetValue(5);
+            answers[1] = (string)MenuScreenController.teacherList.GetValue(6);
+            answers[2] = (string)MenuScreenController.teacherList.GetValue(7);
+            answers[3] = (string)MenuScreenController.teacherList.GetValue(8);
+            answers[4] = (string)MenuScreenController.teacherList.GetValue(9);
             answers[5] = "";
         }
 
@@ -112,11 +575,10 @@ public class GameController : MonoBehaviour
         restart = false;
         outOfShots = false;
         gameOverText.text = "";
-        int seconds = (int)(timePlayed % 60);
+        seconds = (int)(timePlayed % 60);
         TimerText.text = "Time: " + seconds;
         score = 0;
         numShots = 0;
-        shotsLeft = 8;
         random = ShuffleArray(random);
         FindMonsters();
         ShowQuestion();
@@ -125,10 +587,6 @@ public class GameController : MonoBehaviour
         UpdateShots();
         endGame();
 
-        dataController = FindObjectOfType<DataController>();
-       // currentRoundData = dataController.GetCurrentRoundData();
-       // questionPool = currentRoundData.questions;
-       // timeRemaining = currentRoundData.timeLimitInSeconds;
         questionIndex = 0;
         isRoundActive = true;
 
@@ -136,7 +594,6 @@ public class GameController : MonoBehaviour
 
     private void ShowQuestion()
     {
-        //int oneIndex ;
         nullMonster = 0;
         for (int i = 0; i< monsters.Count; i++){
             
@@ -156,7 +613,7 @@ public class GameController : MonoBehaviour
         blueMonsterText.text = answers[random[2]];
         greenMonsterText.text = answers[random[3]];
         orangeMonsterText.text = answers[random[4]];
-
+        //Set text to non-null monsters
         if(monsters[0] != null)
         {
             monsters[0].GetComponent<GUIText>().text = greenMonsterText.text;
@@ -352,15 +809,15 @@ public class GameController : MonoBehaviour
         string[] words = url.Split('?');
 
 
-        UnityWebRequest www = UnityWebRequest.Put("https://cs95gbqvoi.execute-api.us-west-2.amazonaws.com/get_post_put/student-details?"+words[1], putString);
+        UnityWebRequest www = UnityWebRequest.Put("https://cs95gbqvoi.execute-api.us-west-2.amazonaws.com/get_post_put/student-details?" + words[1], putString);
         www.SetRequestHeader("content-type", "application/json");
         www.downloadHandler = new DownloadHandlerBuffer();
         wrongProblems.Clear();
         levelsWon = "0";
         levelsLost = "0";
-        
 
-      yield return www.SendWebRequest();
+
+        yield return www.SendWebRequest();
         if (www.isNetworkError)
         {
             print("Error");
