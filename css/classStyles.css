@@ -1,0 +1,111 @@
+html {
+    margin: 0px;
+    min-height: 100%;
+  }
+  
+body {
+    /* background-color: rgb(14, 212, 238); */
+    background-image: url('images/SingleNeb_08.png');
+    background-position: right;
+    text-align: center;
+    color: rgb(138, 21, 21);
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 165px;
+    }
+
+table{
+    border-collapse: collapse; 
+    empty-cells: hide;
+    width:70%; 
+    margin-left:15%; 
+    margin-right:15%;
+}
+tr{
+    height:50px;
+    text-align: center;
+    vertical-align: center;
+    
+}
+
+
+td:hover {
+    background-color: #b19e9e;
+    color: rgb(15, 17, 15);
+    }
+
+    input[type=button], input[type=submit], input[type=reset], input[type=text], input[type=number] {
+        font-weight: bold;
+        background-color: rgb(32, 22, 177);
+        border: thick, black;
+        color: #02c9c9;
+        padding: 16px 32px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        /* width: 30%; */
+        border-radius: 16px;
+        border: 2px solid white;
+        -webkit-transition-duration: 0.4s; /* Safari */
+        transition-duration: 0.4s;
+      }
+      input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover, input[type=text]:hover, input[type=number]:hover {
+        background-color: rgb(221, 147, 147);
+        color: teal;
+      }
+
+#button1{
+    width: 163px;
+    text-align: center;
+}
+
+#button2{
+    width: 25%;
+    text-align: center;
+}
+
+#div1{
+    display: inline;
+}
+
+#div2{
+    display: inline;
+}
+#div3{
+   padding: 5px;
+}
+#div4{
+    padding: 5px;
+}
+
+#wrapper{
+    padding: 20px;
+}
+#header{
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: white;
+  }
+
+#info{
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: white; 
+}
+
+.probsTable{
+    background-color: transparent;
+}
+
+
+.studentList{
+    background-color: #4CAF50;
+    color: white;
+}
+
+#studentList{
+    background-color: white;
+}
+
+#example{
+    color: white;
+}

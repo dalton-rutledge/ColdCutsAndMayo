@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 
 
-<head>
-    
-    <title></title>
-
-</head>
 
 <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
 <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
@@ -19,22 +14,26 @@
 <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
 <script type="text/javascript" src="apigClient.js"></script>
 
+<head>
+    
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="profileStyles.css" />
+</head>
+
 <body>
 
-    <h1>Create Your Class</h1>
+    <h1 id="h1">Create Your Class</h1>
     <br />
     <br />
 
-    <input type="text" id="code" name="code" pattern="[0-9]{4}" placeholder="4 digit number">
-    This will be your access code for your class! 
+    <input type="text" id="code" name="code" pattern="[0-9]{4}" placeholder="Make a class Access Code (4 digit string)">
     <br />
     <input type="number" id="grade" name="grade" placeholder="Grade">
     <br />
     <br />
 
     <form id="addStudentForm" name="addStudentForm" method="post" action="">      
-            Name:
-            <input type="text" id="SName" name="SName" required> 
+            <input type="text" id="SName" name="SName" placeholder="Student Name" required> 
             <br>
             
             <br>
@@ -44,18 +43,17 @@
     <br />
     <br />
 
-    <form>
+    <form id="addC" style="visibility:hidden">
         <table id="studentList" border=1>
             <tr><th colspan="3">Your Students</th></tr>
-            <tr><th>Student Names:</th>
         </table>
         <input type="button" id="addClass" name="addClass" value="Submit Class" onclick="submitForm(this.form);">
     </form>
     <br />
     <br />
 
-    <form id="goClass" action="class.html">
-        <input type="submit" id="goClass" value="See Class Info">
+    <form id="goClass" action="class.html" style="visibility:hidden">
+        <input type="submit" id="goClass" value="Back to Class Info">
     </form>
     
 
@@ -63,7 +61,6 @@
 
         function addStudent(form) {
             var Name = form.SName.value;
-            //var grade = form.grade.value;
             let tableID = "studentList";
             let tableRef = document.getElementById(tableID);
 
@@ -74,11 +71,14 @@
 
 
             else {
+                document.getElementById("addC").style.visibility = "visible";
+                document.getElementById("goClass").style.visibility = "visible";
                 let newRow = tableRef.insertRow(-1);
                 let newCell = newRow.insertCell(0);
                 let newText = document.createTextNode(Name);
                 newCell.appendChild(newText);
                 $('#SName').val('');
+               
 
             }
         }
@@ -90,9 +90,8 @@
             var Class_ID = document.getElementById("code").value.toString();
             var grade = document.getElementById("grade").value.toString();
 
-            //console.log(grade);
 
-            for (var r = 2; r < tableRef.rows.length; r++) {
+            for (var r = 1; r < tableRef.rows.length; r++) {
                 var studentfname = tableRef.rows[r].innerHTML.toString();
                 
                 var bettername = studentfname.slice(4, -5);
@@ -119,7 +118,6 @@
                
             }
             alert("Your Class has been added!");
-            //window.location.href = "class.html";
 
         }
 

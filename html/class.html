@@ -14,6 +14,10 @@
 <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
 <script type="text/javascript" src="apigClient.js"></script>
 
+<head>
+        <link rel="stylesheet" type="text/css" href="classStyles.css" />
+</head>
+
 <body>
 
     <form id="createClass" action="">
@@ -22,34 +26,145 @@
     </form>
 
     <form id="noClass" action="profile.html">
-        <input type="submit" id="noClass" value="I do not have a class yet">
+        <input type="submit" id="noClass" name ="noClass" value="I do not have a class yet">
     </form>
 
     <br>
     <br>
 
-    <form>
+    <form id="studentForm" style="visibility:hidden">
         <table id="studentList" border=1 style="width:75%">
-            <tr><th colspan="3">Your Students</th></tr>
-            <tr>
+            <tr class='studentList'>
                 <th>Student Names:</th>
                 <th>Grade </th>
                 <th>Time played </th>
                 <th>Levels Passed </th>
                 <th>Levels Failed</th>
                 <th>Wrong Problems</th>
-             </tr>
+            </tr>
         </table>
-
+        <br>
+        <input type="button" value="Print whole class" onclick="printData()" />
+        <br />
+        <input type="button" value="Print Checked" onclick="printChecked()" />
     </form>
     <br />
     <br />
+    <br />
+
+     
+    <form id="addProblems" style="visibility:hidden">
+        <p id='example'>Create a Teacher Level (example "2 + 3 =" "5")</p>
+        <table id="teacherProbs" boarder=1>
+            <tr>
+                <td><input type="text" id="prob1" placeholder="Problem 1" required></td>
+                <td><input type="number" id="answer1" placeholder="Answer" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="prob2" placeholder="Problem 2" required></td>
+                <td><input type="number" id="answer2" placeholder="Answer" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="prob3" placeholder="Problem 3" required></td>
+                <td><input type="number" id="answer3" placeholder="Answer" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="prob4" placeholder="Problem 4" required></td>
+                <td><input type="number" id="answer4" placeholder="Answer" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="prob5" placeholder="Problem 5" required></td>
+                <td><input type="number" id="answer5" placeholder="Answer" required /></td>
+            </tr>
+        </table>
+        <input type="button" value="Add Problems" onclick="addProblems(this.form)" />
+    </form>
+
+    <div id="printTable">
+    <table id="printT" border= 1 style="display:none">
+        <tr>
+            <th>Student Names:</th>
+            <th>Grade </th>
+            <th>Time played </th>
+            <th>Levels Passed </th>
+            <th>Levels Failed</th>
+            <th>Wrong Problems</th>
+        </tr>
+    </table>
+    </div>
 
     <script>
-       
+
+        function printData() {
+            var divToPrint = document.getElementById("studentList");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function printChecked() {
+
+            var printContent = document.getElementById('printTable');
+            var printWindow = window.open("");
+            printWindow.document.write(printContent.innerHTML);
+
+            printWindow.document.getElementById('printT').style.display = 'block';
+
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+
+            printWindow.close();
+
+            return false;
+        }
+
+        function makeBoxes() {
+            checkboxes = document.getElementsByTagName("input");
+            console.log(checkboxes.length);
+            for (var i = 2; i < (checkboxes.length - 13); i++) {
+                var checkbox = checkboxes[i];
+                checkbox.onclick = function () {
+                    var currentRow = this.parentNode.parentNode;
+                    var name = currentRow.getElementsByTagName("td")[0].textContent;
+                    var grade = currentRow.getElementsByTagName("td")[1].textContent;
+                    var time = currentRow.getElementsByTagName("td")[2].textContent;
+                    var passed = currentRow.getElementsByTagName("td")[3].textContent;
+                    var failed = currentRow.getElementsByTagName("td")[4].textContent;
+                    var wrong = currentRow.getElementsByTagName("td")[5].textContent;
+
+                 
+                    let print = document.getElementById("printT");
+                    var row = print.insertRow(-1);
+                    var nameCell = row.insertCell(0);
+                    var gradeCell = row.insertCell(1);
+                    var timeCell = row.insertCell(2);
+                    var passedCell = row.insertCell(3);
+                    var failedCell = row.insertCell(4);
+                    var wrongCell = row.insertCell(5);
+
+                    nameCell.innerHTML = name;
+                    gradeCell.innerHTML = grade;
+                    timeCell.innerHTML = time;
+                    passedCell.innerHTML = passed;
+                    failedCell.innerHTML = failed;
+                    wrongCell.innerHTML = wrong;
+
+                }
+
+                }
+
+        }
+
         function getClass(form) {
 
             jQuery('#createClass').hide();
+            jQuery('#noClass').hide();
+
+            document.getElementById("addProblems").style.visibility = "visible";
+            document.getElementById("studentForm").style.visibility = "visible";
+
 
                     var apigClient = apigClientFactory.newClient();
                     var code = form.aCode.value;
@@ -59,7 +174,16 @@
                     var body = {};
                     var additionalParams = {};
 
-           
+            var url = new URL(window.location.href);
+            var query_string = url.search;
+            var search_params = new URLSearchParams(query_string);
+
+            search_params.append('Class_ID', code);
+            url.search = search_params.toString();
+            var new_url = url.toString();
+
+            history.pushState(null, null, new_url);
+
 
 
             apigClient.getApiGet(params, body, additionalParams)
@@ -72,6 +196,7 @@
 
                       let tableID = "studentList";
                       let tableRef = document.getElementById(tableID);
+
                 
                 for (var x = 0; x < result.data["Items"].length; x++) {
                     var name = result.data["Items"][x]["Student_Name"];
@@ -82,6 +207,7 @@
                     var wrong = result.data["Items"][x]["Wrong_Probs"];
 
                     let newRow = tableRef.insertRow(-1);
+
                     let nameCell = newRow.insertCell(0);
                     let nameText = document.createTextNode(name);
                     nameCell.appendChild(nameText);
@@ -105,17 +231,79 @@
                     let wrongCell = newRow.insertCell(-1);
                     let wrongText = document.createTextNode(wrong);
                     wrongCell.appendChild(wrongText);
-                    
-                    
-                      }
+
+                    let printCell = newRow.insertCell(-1);
+                    let print = document.createElement("input");
+                    print.type = "checkbox";
+                    printCell.appendChild(print);
+                   }
+
+                  makeBoxes();
 
                 console.log("Success!");
             }).catch( function(result){
                 console.log("error");
                 console.log(result);
-            });
+                });
+        }
 
+        function addProblems(form) {
+
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) { return pair[1]; }
                 }
+                return (false);
+            }
+
+            var code = getQueryVariable("Class_ID");
+
+            var prob1 = document.getElementById("prob1").value.toString();
+            var prob2 = document.getElementById("prob2").value.toString();
+            var prob3 = document.getElementById("prob3").value.toString();
+            var prob4 = document.getElementById("prob4").value.toString();
+            var prob5 = document.getElementById("prob5").value.toString();
+
+            var ans1 = document.getElementById("answer1").value.toString();
+            var ans2 = document.getElementById("answer2").value.toString();
+            var ans3 = document.getElementById("answer3").value.toString();
+            var ans4 = document.getElementById("answer4").value.toString();
+            var ans5 = document.getElementById("answer5").value.toString();
+
+            var apigClient = apigClientFactory.newClient();
+            var params = {};
+            var body = {
+                "Class_ID": code,
+                "Problems": [
+                    prob1,
+                    prob2,
+                    prob3,
+                    prob4,
+                    prob5
+                ],
+                "Answers": [
+                    ans1,
+                    ans2,
+                    ans3,
+                    ans4,
+                    ans5
+                ]
+            };
+            var additionalParams = {};
+            
+            apigClient.problemsGetPostPost(params, body, additionalParams)
+                    .then(function (result) {
+                            console.log("Success!");
+                        }).catch(function (result) {
+                            console.log("error");
+                            console.log("this does it");
+                });
+            alert("Your level is created!");
+
+        }
     </script>
     <script src="js/vendor/jquery-3.1.0.js"></script>
     <script src="js/vendor/bootstrap.min.js"></script>

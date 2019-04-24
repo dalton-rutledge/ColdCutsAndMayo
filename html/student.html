@@ -2,6 +2,7 @@
 
 <head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="studentStyles.css"/>
 </head>
 <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
 <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
@@ -15,21 +16,26 @@
 <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
 <script type="text/javascript" src="apigClient.js"></script>
 <body>
-
-    <h1>
-        Sign in to Play the Game
+<div id="container">
+    <h1 id = 'header'>
+        Sign in to Play the Game!
     </h1>
 
-    <img src="images/blueJelly.jpg">
+    <img src="images/blueMonster.png">
 
     <form id="studentAcces">
-        <input type="text" id="Class_ID" name="Class_ID" placeholder="Code From Teacher" required>
-        <input type="button" id="codeButton" name="codeButton" value="Enter" onclick="submitCode(this.form);">
-        <select name="studentName" id="studentName" placeholder="name" required>
+        <div id = 'div1'><input type="text" id="Class_ID" name="Class_ID" placeholder="Code From Teacher" required><input type="button" id="codeButton" name="codeButton" value="Enter" onclick="submitCode(this.form);"></div>
+        
+        
+        <div id = 'div2'><select class="select-css" name="studentName" id="studentName" placeholder="name" required>
+        
             <option value="" disabled selected>Pick Your Name</option>
+        
         </select>
-        <input type="submit" value="See your Progress" formaction="studentData.html">
-        <input type="submit" value="Let's go shoot Monsters" formaction="Jelly_Monsters/index.html"> 
+    </div>
+       <div id = 'div3'><input id = 'Progress' type="submit" value="See your Progress" formaction="studentData.html">
+        <input id = 'Monster' type="submit" value="Let's go shoot Monsters" formaction="Jelly_Monsters/index.html"> 
+    </div> 
     </form>
 
     <script>
@@ -49,25 +55,36 @@
             var body = {};
             var additionalParams = {};
 
-            apigClient.getApiGet(params, body, additionalParams)
-                .then(function (result) {
-                    console.log(result);
-                    console.log(result.data);
-                    console.log(result.data["Items"].length);
-                    console.log(result.data["Items"][0]);
-                    console.log(result.data["Items"][0]["Student_Name"]);
-                    var dropdown = document.getElementById("studentName");
-                    var selectList = "";
-                    var selectOption = "";
-                    for (var x = 0; x < result.data["Items"].length; x++) {
-                        dropdown.options[dropdown.options.length] = new Option(result.data["Items"][x]["Student_Name"], x)
-                    }
-
-                    console.log("Success!");
-                }).catch(function (result) {
-                    console.log("error");
-                    console.log(result);
+apigClient.getApiGet(params, body, additionalParams)
+    .then(function(result){
+        console.log(result);
+        console.log(result.data);
+        console.log(result.data["Items"].length);
+        console.log(result.data["Items"][0]);
+        console.log(result.data["Items"][0]["Student_Name"]);
+        //var selectList = "<select name='studentName'>";
+        var dropdown = document.getElementById("studentName");
+        var selectList = "";
+        var selectOption = "";
+        for (var x = 0; x < result.data["Items"].length; x++) {
+            //selectList += "<option>" + result.data["Items"][x]["Student_Name"] + "</option>";
+            dropdown.options[dropdown.options.length] = new Option(result.data["Items"][x]["Student_Name"], x)
+        }
+        
+        console.log("Success!");
+    }).catch( function(result){
+        console.log("error");
+        console.log(result);
                 });
+
+
+            function sendProgress() {
+                //document.getElementById()
+            }
+
+            function goPlayGame() {
+
+            }
 
         }
     </script>
@@ -79,6 +96,6 @@
     <script src="js/config.js"></script>
     <script src="js/cognito-auth.js"></script>
     <script src="js/esri-map.js"></script>
-
+</div>
 </body>
 </html>

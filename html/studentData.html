@@ -3,7 +3,7 @@
 <html>
 <head>
     <title> Your Progress </title>
-
+    <link rel="stylesheet" type="text/css" href="studentDataStyles.css" />
 </head>
 
 <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
@@ -19,40 +19,113 @@
 <script type="text/javascript" src="apigClient.js"></script>
 
 
+<body onload="getData()" style ="text-align: center;">
 
-<body onload="getData()">
+    <div id="avatar">
+       <h1 id="aText">
+       </h1>
+    </div>
 
+    <div id="container">
     <form>
+        <div style="overflow-x:auto;">
         <table id="studentList" border=1 style="width:75%">
             <tr>
                 <th>Name </th>
                 <th>Grade </th>
                 <th>Time played </th>
-                <th>Levles Passed </th>
+                <th>Levels Passed </th>
                 <th>Levels Failed </th>
                 <th> Wrong Problems </th>
             </tr>
         </table>
+        </div>
+        <input type="button" value="PRINT" onclick="printData()" />
     </form>
+    <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 
     <script>
 
-        function getData() {
 
-            function getQueryVariable(variable) {
-                var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i = 0; i < vars.length; i++) {
-                    var pair = vars[i].split("=");
-                    if (pair[0] == variable) { return pair[1]; }
-                }
-                return (false);
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
             }
+            return (false);
+        }
+
+        function avatar() {
+            
+            var code = getQueryVariable("Class_ID");
+            var x = getQueryVariable("studentName");
+            var text = document.getElementById("aText");
+
+            var apigClient = apigClientFactory.newClient();
+            var params = {
+                "Class_ID": code
+            };
+            var body = {};
+            var additionalParams = {};
+
+            apigClient.getApiGet(params, body, additionalParams)
+                .then(function (result) {
+
+                    let src = document.getElementById("avatar");
+                    let img = document.createElement("img");
+                    var wins = result.data["Items"][x]["Level_Wins"];
+
+                    if (wins < 10) {
+                        img.src = "images/rabbit.png";
+                        src.appendChild(img);
+                        text.textContent += "You are a Math Bunny! Win more levels to change your avatar!";
+                    }
+                    if ( wins >= 10 && wins < 20) {
+                        img.src = "images/fox.png";
+                        src.appendChild(img);
+                        text.textContent += "Clever like a fox!";
+                    }
+                    if (wins >= 20 && wins < 30) {
+                        img.src = "images/ninja.png";
+                        src.appendChild(img);
+                        text.textContent += "You are finally a Math Ninja!";
+
+                    }
+                    if (wins >= 30 && wins < 40) {
+                        img.src = "images/wizard.png";
+                        src.appendChild(img);
+                        text.textContent += "You are so good at math you are pretty much a wizard!";
+
+                    }
+                    if (wins >= 40) {
+                        img.src = "images/dragon.png";
+                        src.appendChild(img);
+                        text.textContent += "At last... MATH DRAGON!";
+
+                    }
+
+                }).catch(function (result) {
+                    console.log("error");
+                    console.log(result);
+                });                 
+
+        }
+
+        function printData() {
+            var divToPrint = document.getElementById("studentList");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function getData() {
 
             var code = getQueryVariable("Class_ID");
             var x = getQueryVariable("studentName");
 
-            console.log(x);
 
             var apigClient = apigClientFactory.newClient();
             var params = {
@@ -72,52 +145,48 @@
                     let tableID = "studentList";
                     let tableRef = document.getElementById(tableID);
 
-                        var name = result.data["Items"][x]["Student_Name"];
-                        var grade = result.data["Items"][x]["Grade"];
-                        var time = result.data["Items"][x]["Time_Played"];
-                        var wins = result.data["Items"][x]["Level_Wins"];
-                        var losses = result.data["Items"][x]["Level_Losses"];
-                        var wrong = result.data["Items"][x]["Wrong_Probs"];
+                    var name = result.data["Items"][x]["Student_Name"];
+                    var grade = result.data["Items"][x]["Grade"];
+                    var time = result.data["Items"][x]["Time_Played"];
+                    var wins = result.data["Items"][x]["Level_Wins"];
+                    var losses = result.data["Items"][x]["Level_Losses"];
+                    var wrong = result.data["Items"][x]["Wrong_Probs"];
 
+                    let newRow = tableRef.insertRow(-1);
+                    let nameCell = newRow.insertCell(0);
+                    let nameText = document.createTextNode(name);
+                    nameCell.appendChild(nameText);
 
+                    let gradeCell = newRow.insertCell(-1);
+                    let gradeText = document.createTextNode(grade);
+                    gradeCell.appendChild(gradeText);
 
-                        let newRow = tableRef.insertRow(-1);
-                        let nameCell = newRow.insertCell(0);
-                        let nameText = document.createTextNode(name);
-                        nameCell.appendChild(nameText);
+                    let timeCell = newRow.insertCell(-1);
+                    let timeText = document.createTextNode(time);
+                    timeCell.appendChild(timeText);
 
-                        let gradeCell = newRow.insertCell(-1);
-                        let gradeText = document.createTextNode(grade);
-                        gradeCell.appendChild(gradeText);
+                    let winsCell = newRow.insertCell(-1);
+                    let winsText = document.createTextNode(wins);
+                    winsCell.appendChild(winsText);
 
-                        let timeCell = newRow.insertCell(-1);
-                        let timeText = document.createTextNode(time);
-                        timeCell.appendChild(timeText);
+                    let lossesCell = newRow.insertCell(-1);
+                    let lossesText = document.createTextNode(losses);
+                    lossesCell.appendChild(lossesText);
 
-                        let winsCell = newRow.insertCell(-1);
-                        let winsText = document.createTextNode(wins);
-                        winsCell.appendChild(winsText);
+                    let wrongCell = newRow.insertCell(-1);
+                    let wrongText = document.createTextNode(wrong);
+                    wrongCell.appendChild(wrongText);
 
-                        let lossesCell = newRow.insertCell(-1);
-                        let lossesText = document.createTextNode(losses);
-                        lossesCell.appendChild(lossesText);
+                    var url = new URL(window.location.href);
+                    var query_string = url.search;
+                    var search_params = new URLSearchParams(query_string);
 
-                        let wrongCell = newRow.insertCell(-1);
-                        let wrongText = document.createTextNode(wrong);
-                        wrongCell.appendChild(wrongText);
+                    search_params.append('Student_Name', name);
+                    url.search = search_params.toString();
+                    var new_url = url.toString();
 
-
-                      var url = new URL(window.location.href);
-                      var query_string = url.search;
-                      var search_params = new URLSearchParams(query_string);
-
-                      search_params.append('Student_Name', name);
-                      url.search = search_params.toString();
-                      var new_url = url.toString();
-
-                      history.pushState(null, null, new_url);
-
-                    //}
+                    history.pushState(null, null, new_url);
+                    avatar();
 
                     console.log("Success!");
                 }).catch(function (result) {
@@ -136,6 +205,6 @@
     <script src="js/config.js"></script>
     <script src="js/cognito-auth.js"></script>
     <script src="js/esri-map.js"></script>
-
+</div>
 </body>
 </html>

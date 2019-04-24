@@ -1,0 +1,37 @@
+
+html {
+  margin: 0px;
+  min-height: 100%;
+}
+
+body {
+  background-image: url('images/SingleNeb_09.png');
+  text-align: center;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 165px;
+}
+
+#teacher {
+text-align: center;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    font-weight: bold;
+    background-color: rgb(32, 22, 177);
+    border: thick, black;
+    color: #02c9c9;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 30%;
+    border-radius: 16px;
+    border: 2px solid white;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+  }
+  input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+    background-color: rgb(221, 147, 147);
+    color: teal;
+  }
