@@ -53,7 +53,7 @@ apigClientFactory.newClient = function (config) {
 
     
     // extract endpoint and path from url
-    var invokeUrl = 'https://cs95gbqvoi.execute-api.us-west-2.amazonaws.com/JustPost';
+    var invokeUrl = 'https://cs95gbqvoi.execute-api.us-west-2.amazonaws.com/get_post_put';
     var endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
     var pathComponent = invokeUrl.substring(endpoint.length);
 
@@ -83,6 +83,60 @@ apigClientFactory.newClient = function (config) {
     
     
     
+    apigClient.getApiGet = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, ['Class_ID'], ['body']);
+        
+        var getApiGetRequest = {
+            verb: 'get'.toUpperCase(),
+            path: pathComponent + uritemplate('/get-api').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['Class_ID']),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(getApiGetRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.getApiOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var getApiOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/get-api').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(getApiOptionsRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.studentDetailsPut = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var studentDetailsPutRequest = {
+            verb: 'put'.toUpperCase(),
+            path: pathComponent + uritemplate('/student-details').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(studentDetailsPutRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
     apigClient.studentDetailsPost = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
@@ -98,6 +152,24 @@ apigClientFactory.newClient = function (config) {
         
         
         return apiGatewayClient.makeRequest(studentDetailsPostRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.studentDetailsOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var studentDetailsOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/student-details').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(studentDetailsOptionsRequest, authType, additionalParams, config.apiKey);
     };
     
 
